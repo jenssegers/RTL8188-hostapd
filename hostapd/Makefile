@@ -772,6 +772,7 @@ install: all
 	mkdir -p $(DESTDIR)/usr/local/bin
 	for i in $(ALL); do cp -f $$i $(DESTDIR)/usr/local/bin/$$i; done
 	cp -f ../scripts/init /etc/init.d/hostapd
+	chmod +x /etc/init.d/hostapd
 	mkdir -p /etc/hostapd
 	cp -f ../scripts/hostapd.conf /etc/hostapd/
 
