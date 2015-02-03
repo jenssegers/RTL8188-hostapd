@@ -434,7 +434,7 @@ static void wpa_supplicant_scan(void *eloop_ctx, void *timeout_ctx)
 	if (wps) {
 		wps_ie = wps_build_probe_req_ie(wps == 2, &wpa_s->wps->dev,
 						wpa_s->wps->uuid, req_type,
-						0, NULL);
+						0, NULL, wpa_s->wps->config_methods);
 		if (wps_ie) {
 			params.extra_ies = wpabuf_head(wps_ie);
 			params.extra_ies_len = wpabuf_len(wps_ie);

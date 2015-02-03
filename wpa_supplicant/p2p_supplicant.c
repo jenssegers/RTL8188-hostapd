@@ -104,7 +104,7 @@ static int wpas_p2p_scan(void *ctx, enum p2p_scan_type type, int freq,
 	wpa_s->wps->dev.p2p = 1;
 	wps_ie = wps_build_probe_req_ie(0, &wpa_s->wps->dev, wpa_s->wps->uuid,
 					WPS_REQ_ENROLLEE,
-					num_req_dev_types, req_dev_types);
+					num_req_dev_types, req_dev_types, wpa_s->wps->config_methods);
 	if (wps_ie == NULL)
 		return -1;
 
@@ -2720,7 +2720,7 @@ static void wpas_p2p_join_scan(void *eloop_ctx, void *timeout_ctx)
 
 	wpa_s->wps->dev.p2p = 1;
 	wps_ie = wps_build_probe_req_ie(0, &wpa_s->wps->dev, wpa_s->wps->uuid,
-					WPS_REQ_ENROLLEE, 0, NULL);
+					WPS_REQ_ENROLLEE, 0, NULL, wpa_s->wps->config_methods);
 	if (wps_ie == NULL) {
 		wpas_p2p_scan_res_join(wpa_s, NULL);
 		return;

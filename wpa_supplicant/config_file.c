@@ -635,6 +635,9 @@ static void wpa_config_write_global(FILE *f, struct wpa_config *config)
 		uuid_bin2str(config->uuid, buf, sizeof(buf));
 		fprintf(f, "uuid=%s\n", buf);
 	}
+	if (config->rf_bands != WPS_RF_24GHZ)
+		fprintf(f, "rf_bands=%d\n", config->rf_bands);
+
 	if (config->device_name)
 		fprintf(f, "device_name=%s\n", config->device_name);
 	if (config->manufacturer)

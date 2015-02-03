@@ -1,0 +1,5 @@
+---- scan2 Matches (4 in 2 files) ----
+Driver_i.h (d:\rtl8712\linux_92c\wpa_supplicant_hostapd-0.8\wpa_supplicant):	if (wpa_s->driver->scan2)
+Driver_i.h (d:\rtl8712\linux_92c\wpa_supplicant_hostapd-0.8\wpa_supplicant):		return wpa_s->driver->scan2(wpa_s->drv_priv, params);
+Wpa_priv.c (d:\rtl8712\linux_92c\wpa_supplicant_hostapd-0.8\wpa_supplicant):	if (iface->driver->scan2)
+Wpa_priv.c (d:\rtl8712\linux_92c\wpa_supplicant_hostapd-0.8\wpa_supplicant):		iface->driver->scan2(iface->drv_priv, &params);

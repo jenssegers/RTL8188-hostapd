@@ -238,7 +238,8 @@ struct wpabuf * wps_build_probe_req_ie(int pbc, struct wps_device_data *dev,
 				       const u8 *uuid,
 				       enum wps_request_type req_type,
 				       unsigned int num_req_dev_types,
-				       const u8 *req_dev_types);
+				       const u8 *req_dev_types,
+				       u16 config_methods);
 
 
 /**

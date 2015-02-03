@@ -269,6 +269,8 @@ struct wpa_config {
 	 * uuid - Universally Unique IDentifier (UUID; see RFC 4122) for WPS
 	 */
 	u8 uuid[16];
+	//WPS_RF_24GHZ 0x01, WPS_RF_50GHZ 0x02
+	int rf_bands;
 
 	/**
 	 * device_name - Device Name (WPS)

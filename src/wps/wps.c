@@ -286,12 +286,12 @@ int wps_is_addr_authorized(const struct wpabuf *msg, const u8 *addr,
 //	Marked by Albert 2011/11/17
 //	Some APs won't carry the AuthorizedMACs in the probe response.
 //	So, skip this check will speed up the process to find the current AP out for WPS handshake.
-/*	
+#if 0
 	if (!attr.version2 && ver1_compat) {
 		/*
 		 * Version 1.0 AP - AuthorizedMACs not used, so revert back to
 		 * old mechanism of using SelectedRegistrar.
-
+		*/
 		return is_selected_pin_registrar(&attr);
 	}
 
@@ -307,7 +307,7 @@ int wps_is_addr_authorized(const struct wpabuf *msg, const u8 *addr,
 	}
 
 	return 0;
-*/
+#endif
 }
 
 
@@ -436,6 +436,7 @@ struct wpabuf * wps_build_assoc_resp_ie(void)
  * @req_type: Value for Request Type attribute
  * @num_req_dev_types: Number of requested device types
  * @req_dev_types: Requested device types (8 * num_req_dev_types octets) or
+ * @config_methods: Supported config methods
  *	%NULL if none
  * Returns: WPS IE or %NULL on failure
  *
@@ -445,7 +446,8 @@ struct wpabuf * wps_build_probe_req_ie(int pbc, struct wps_device_data *dev,
 				       const u8 *uuid,
 				       enum wps_request_type req_type,
 				       unsigned int num_req_dev_types,
-				       const u8 *req_dev_types)
+				       const u8 *req_dev_types,
+				       u16 config_methods)
 {
 	struct wpabuf *ie;
 	u16 methods = 0;
@@ -484,7 +486,8 @@ struct wpabuf * wps_build_probe_req_ie(int pbc, struct wps_device_data *dev,
 
 	if (wps_build_version(ie) ||
 	    wps_build_req_type(ie, req_type) ||
-	    wps_build_config_methods(ie, methods) ||
+	    wps_build_config_methods(ie, config_methods) ||
+//	    wps_build_config_methods(ie, methods) ||
 	    wps_build_uuid_e(ie, uuid) ||
 	    wps_build_primary_dev_type(dev, ie) ||
 	    wps_build_rf_bands(dev, ie) ||

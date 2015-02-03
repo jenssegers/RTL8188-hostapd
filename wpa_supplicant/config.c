@@ -2173,6 +2173,7 @@ struct wpa_config * wpa_config_alloc_empty(const char *ctrl_interface,
 	config->bss_expiration_age = DEFAULT_BSS_EXPIRATION_AGE;
 	config->bss_expiration_scan_count = DEFAULT_BSS_EXPIRATION_SCAN_COUNT;
 	config->max_num_sta = DEFAULT_MAX_NUM_STA;
+	config->rf_bands = WPS_RF_24GHZ;
 
 	if (ctrl_interface)
 		config->ctrl_interface = os_strdup(ctrl_interface);
@@ -2417,6 +2418,7 @@ static const struct global_parse_data global_fields[] = {
 	{ FUNC_NO_VAR(load_dynamic_eap), 0 },
 #ifdef CONFIG_WPS
 	{ FUNC(uuid), CFG_CHANGED_UUID },
+	{ INT(rf_bands), 0 },
 	{ STR_RANGE(device_name, 0, 32), CFG_CHANGED_DEVICE_NAME },
 	{ STR_RANGE(manufacturer, 0, 64), CFG_CHANGED_WPS_STRING },
 	{ STR_RANGE(model_name, 0, 32), CFG_CHANGED_WPS_STRING },

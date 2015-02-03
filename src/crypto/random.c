@@ -208,12 +208,12 @@ int random_pool_ready(void)
 	 * so use non-blocking read to avoid blocking the application
 	 * completely.
 	 */
-	fd = open("/dev/random", O_RDONLY | O_NONBLOCK);
+	fd = open("/dev/urandom", O_RDONLY | O_NONBLOCK);
 	if (fd < 0) {
 #ifndef CONFIG_NO_STDOUT_DEBUG
 		int error = errno;
-		perror("open(/dev/random)");
-		wpa_printf(MSG_ERROR, "random: Cannot open /dev/random: %s",
+		perror("open(/dev/urandom)");
+		wpa_printf(MSG_ERROR, "urandom: Cannot open /dev/urandom: %s",
 			   strerror(error));
 #endif /* CONFIG_NO_STDOUT_DEBUG */
 		return -1;
@@ -222,12 +222,12 @@ int random_pool_ready(void)
 	res = read(fd, dummy_key + dummy_key_avail,
 		   sizeof(dummy_key) - dummy_key_avail);
 	if (res < 0) {
-		wpa_printf(MSG_ERROR, "random: Cannot read from /dev/random: "
+		wpa_printf(MSG_ERROR, "random: Cannot read from /dev/urandom: "
 			   "%s", strerror(errno));
 		res = 0;
 	}
-	wpa_printf(MSG_DEBUG, "random: Got %u/%u bytes from "
-		   "/dev/random", (unsigned) res,
+	wpa_printf(MSG_DEBUG, "urandom: Got %u/%u bytes from "
+		   "/dev/urandom", (unsigned) res,
 		   (unsigned) (sizeof(dummy_key) - dummy_key_avail));
 	dummy_key_avail += res;
 	close(fd);
@@ -236,17 +236,17 @@ int random_pool_ready(void)
 		return 1;
 
 	wpa_printf(MSG_INFO, "random: Only %u/%u bytes of strong "
-		   "random data available from /dev/random",
+		   "random data available from /dev/urandom",
 		   (unsigned) dummy_key_avail, (unsigned) sizeof(dummy_key));
 
 	if (own_pool_ready >= MIN_READY_MARK ||
 	    total_collected + 10 * own_pool_ready > MIN_COLLECT_ENTROPY) {
-		wpa_printf(MSG_INFO, "random: Allow operation to proceed "
+		wpa_printf(MSG_INFO, "urandom: Allow operation to proceed "
 			   "based on internal entropy");
 		return 1;
 	}
 
-	wpa_printf(MSG_INFO, "random: Not enough entropy pool available for "
+	wpa_printf(MSG_INFO, "urandom: Not enough entropy pool available for "
 		   "secure operations");
 	return 0;
 #else /* __linux__ */

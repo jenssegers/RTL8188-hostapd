@@ -214,7 +214,6 @@ static inline int wpa_ctrl_command(struct wpa_ctrl *ctrl, char *cmd)
 	return _wpa_ctrl_command(ctrl, cmd, 1);
 }
 
-
 static int hostapd_cli_cmd_ping(struct wpa_ctrl *ctrl, int argc, char *argv[])
 {
 	return wpa_ctrl_command(ctrl, "PING");
