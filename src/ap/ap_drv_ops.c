@@ -144,6 +144,15 @@ int hostapd_set_ap_wps_ie(struct hostapd_data *hapd)
 	}
 #endif /* CONFIG_P2P_MANAGER */
 
+	if (hapd->conf->vendor_elements) {
+		size_t add = wpabuf_len(hapd->conf->vendor_elements);
+		if (wpabuf_resize(&beacon, add) == 0)
+			wpabuf_put_buf(beacon, hapd->conf->vendor_elements);
+		if (wpabuf_resize(&proberesp, add) == 0)
+			wpabuf_put_buf(proberesp, hapd->conf->vendor_elements);
+	}
+
+
 	ret = hapd->driver->set_ap_wps_ie(hapd->drv_priv, beacon, proberesp,
 					  assocresp);
 
