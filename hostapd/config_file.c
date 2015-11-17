@@ -2035,6 +2035,39 @@ struct hostapd_config * hostapd_config_read(const char *fname)
 			else
 				bss->p2p &= ~P2P_ALLOW_CROSS_CONNECTION;
 #endif /* CONFIG_P2P_MANAGER */
+		} else if (os_strcmp(buf, "vendor_elements") == 0) {
+			struct wpabuf *elems;
+			size_t len = os_strlen(pos);
+			if (len & 0x01) {
+				wpa_printf(MSG_ERROR,
+					   "Line %d: Invalid vendor_elements '%s'",
+					   line, pos);
+				errors++;
+				continue;
+			}
+			len /= 2;
+			if (len == 0) {
+				wpabuf_free(bss->vendor_elements);
+				bss->vendor_elements = NULL;
+				continue;
+			}
+
+			elems = wpabuf_alloc(len);
+			if (elems == NULL)
+				errors++;
+				continue;
+
+			if (hexstr2bin(pos, wpabuf_put(elems, len), len)) {
+				wpabuf_free(elems);
+				wpa_printf(MSG_ERROR,
+					   "Line %d: Invalid vendor_elements '%s'",
+					   line, pos);
+				errors++;
+				continue;
+			}
+
+			wpabuf_free(bss->vendor_elements);
+			bss->vendor_elements = elems;
 		} else if (os_strcmp(buf, "disassoc_low_ack") == 0) {
 			bss->disassoc_low_ack = atoi(pos);
 		} else if (os_strcmp(buf, "tdls_prohibit") == 0) {

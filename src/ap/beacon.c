@@ -307,6 +307,8 @@ void handle_probe_req(struct hostapd_data *hapd,
 	if (hapd->p2p_probe_resp_ie)
 		buflen += wpabuf_len(hapd->p2p_probe_resp_ie);
 #endif /* CONFIG_P2P */
+	if (hapd->conf->vendor_elements)
+		buflen += wpabuf_len(hapd->conf->vendor_elements);
 	resp = os_zalloc(buflen);
 	if (resp == NULL)
 		return;
@@ -380,6 +382,12 @@ void handle_probe_req(struct hostapd_data *hapd,
 		pos = hostapd_eid_p2p_manage(hapd, pos);
 #endif /* CONFIG_P2P_MANAGER */
 
+	if (hapd->conf->vendor_elements) {
+		os_memcpy(pos, wpabuf_head(hapd->conf->vendor_elements),
+			  wpabuf_len(hapd->conf->vendor_elements));
+		pos += wpabuf_len(hapd->conf->vendor_elements);
+	}
+
 	if (hostapd_drv_send_mlme(hapd, resp, pos - (u8 *) resp) < 0)
 		perror("handle_probe_req: send");
 
@@ -415,6 +423,8 @@ void ieee802_11_set_beacon(struct hostapd_data *hapd)
 	if (hapd->p2p_beacon_ie)
 		tail_len += wpabuf_len(hapd->p2p_beacon_ie);
 #endif /* CONFIG_P2P */
+	if (hapd->conf->vendor_elements)
+		tail_len += wpabuf_len(hapd->conf->vendor_elements);
 	tailpos = tail = os_malloc(tail_len);
 	if (head == NULL || tail == NULL) {
 		wpa_printf(MSG_ERROR, "Failed to set beacon data");
@@ -510,6 +520,12 @@ void ieee802_11_set_beacon(struct hostapd_data *hapd)
 	    P2P_MANAGE)
 		tailpos = hostapd_eid_p2p_manage(hapd, tailpos);
 #endif /* CONFIG_P2P_MANAGER */
+
+	if (hapd->conf->vendor_elements) {
+		os_memcpy(tailpos, wpabuf_head(hapd->conf->vendor_elements),
+			  wpabuf_len(hapd->conf->vendor_elements));
+		tailpos += wpabuf_len(hapd->conf->vendor_elements);
+	}
 
 	tail_len = tailpos > tail ? tailpos - tail : 0;
 
